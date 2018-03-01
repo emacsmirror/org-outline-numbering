@@ -2,7 +2,8 @@
 
 ;; Copyright (C) 2018
 
-;; Author:  Anders Johansson
+;; Author: John Kitchin, Anders Johansson
+;; Maintainer: Anders Johansson
 ;; Created: 2018-02-16
 ;; Updated: 2018-02-16
 ;; Keywords: wp, convenience
@@ -44,7 +45,7 @@
   :init-value nil
   (if org-outline-numbering-mode
       (org-outline-numbering-overlay)
-    (ov-clear 'numbered-heading)))
+    (org-outline-numbering-clear-overlays)))
 
 ;;;###autoload
 (defun org-outline-numbering-overlay ()
@@ -92,6 +93,14 @@
              (overlay-put ov 'display (concat (mapconcat 'number-to-string lv ".") ". "))
              (overlay-put ov 'numbered-heading t)
              (overlay-put ov 'face 'default))))
+
+;;;###autoload
+(defun org-outline-numbering-clear-overlays ()
+  "Clear outline numbering overlays in widened buffer"
+  (interactive)
+  (save-restriction
+    (widen)
+    (ov-clear 'numbered-heading)))
 
 (provide 'org-outline-numbering)
 ;;; org-outline-numbering.el ends here
