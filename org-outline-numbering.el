@@ -31,6 +31,7 @@
 
 ;;; Code
 (require 'org)
+(require 'org-inlinetask)
 (require 'cl-lib)
 (require 'ov)
 
@@ -83,6 +84,7 @@
                  (lambda (_todo tags-list _level)
                    (setq org-cached-props nil)
                    (and (not (org-in-commented-heading-p))
+                        (not (org-inlinetask-in-task-p))
                         (not (cl-intersection
                               org-outline-numbering-ignored-tags
                               tags-list :test
