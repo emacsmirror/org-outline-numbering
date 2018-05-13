@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2018
 
-;; Author: John Kitchin, Anders Johansson
+;; Author: Anders Johansson
 ;; Maintainer: Anders Johansson
 ;; Created: 2018-02-16
 ;; Updated: 2018-02-16
@@ -31,12 +31,15 @@
 
 ;;; Code
 (require 'org)
-(require 'org-inlinetask)
+(require 'ox)
 (require 'cl-lib)
 (require 'ov)
 
-(defcustom org-outline-numbering-ignored-tags '("noexport" "ARCHIVE")
-  "List of tags for which subtrees will be not be given numbers"
+(defcustom org-outline-numbering-ignored-tags '()
+  "List of extra tags for which subtrees will be not be given numbers.
+There is no need to add the tags from ‘org-export-exlude-tags’,
+the ARCHIVE tag or similar here, since the default export
+settings which excludes these are used"
   :type '(repeat string)
   :group 'org)
 
@@ -53,45 +56,26 @@
   "Put numbered overlays on the headings."
   (interactive)
   (cl-loop for (p lv) in
-           (let ((counters (cl-copy-list '(0 0 0 0 0 0 0 0 0 0)))
-                 (current-level 1)
-                 last-level)
-             (save-excursion
-               (org-with-wide-buffer
-                (goto-char (point-min))
-                (org-scan-tags
-                 (lambda ()
-                   (let* ((hl (org-element-context))
-                          (level (org-element-property :level hl)))
-                     (setq last-level current-level
-                           current-level level) 
-                     (cond
-                      ;; no level change or increase, increment level counter
-                      ((or (= last-level current-level)
-                           (> current-level last-level))
-                       (cl-incf (nth (1- current-level) counters)))
-
-                      ;; decrease in level
-                      (t
-                       (cl-loop for i from (+ 1 current-level) below (length counters)
-                                do
-                                (setf (nth (1- i) counters) 0))
-                       (cl-incf (nth (1- current-level) counters))))
-
-                     (list (point)
-                           (cl-subseq counters 0
-                                      (cl-position 0 counters)))))
-                 (lambda (_todo tags-list _level)
-                   (setq org-cached-props nil)
-                   (and (not (org-in-commented-heading-p))
-                        (not (org-inlinetask-in-task-p))
-                        (not (cl-intersection
-                              org-outline-numbering-ignored-tags
-                              tags-list :test
-                              #'string=))))
-                 nil))))
+           (let* ((info (org-combine-plists
+                         (org-export--get-export-attributes)
+		                 (org-export--get-buffer-attributes)
+                         (org-export-get-environment)
+                         '(:section-numbers t)))
+                  (info (plist-put info :exclude-tags
+                                   (append
+                                    (plist-get info :exclude-tags)
+                                    org-outline-numbering-ignored-tags)))
+                  (tree (org-element-parse-buffer))
+                  numberlist)
+             (org-export--prune-tree tree info)
+             (setq numberlist
+                   (org-export--collect-headline-numbering tree info))
+             (cl-loop for hl in numberlist
+                      collect (cons
+                               (org-element-property :begin (car hl))
+                               (list (cdr hl)))))
            do
-           (let ((ov (make-overlay p (+ 1 p))))
+           (let ((ov (make-overlay p (+ (length lv) p))))
              (overlay-put ov 'display (concat (mapconcat 'number-to-string lv ".") ". "))
              (overlay-put ov 'numbered-heading t)
              (overlay-put ov 'face 'default))))
