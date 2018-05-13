@@ -30,7 +30,6 @@
 ;; https://emacs.stackexchange.com/a/32422
 
 ;;; Code
-(require 'org)
 (require 'ox)
 (require 'cl-lib)
 (require 'ov)
@@ -76,7 +75,8 @@ settings which excludes these are used"
                                (list (cdr hl)))))
            do
            (let ((ov (make-overlay p (+ (length lv) p))))
-             (overlay-put ov 'display (concat (mapconcat 'number-to-string lv ".") ". "))
+             (overlay-put ov 'display
+                          (concat (mapconcat 'number-to-string lv ".") ". "))
              (overlay-put ov 'numbered-heading t)
              (overlay-put ov 'face 'default))))
 
