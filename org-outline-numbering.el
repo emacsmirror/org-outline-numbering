@@ -34,13 +34,19 @@
 (require 'cl-lib)
 (require 'ov)
 
+(defgroup org-outline-numbering nil
+  "Options for the org-outline-numbering library."
+  :group 'org)
+
 (defcustom org-outline-numbering-ignored-tags '()
   "List of extra tags for which subtrees will be not be given numbers.
 There is no need to add the tags from ‘org-export-exlude-tags’,
 the ARCHIVE tag or similar here, since the default export
 settings which excludes these are used"
-  :type '(repeat string)
-  :group 'org)
+  :type '(repeat string))
+
+(defface org-outline-numbering-face '((t :inherit default))
+  "Face for displaying outline numbers in ‘org-mode’")
 
 ;;;###autoload
 (define-minor-mode org-outline-numbering-mode
@@ -78,7 +84,7 @@ settings which excludes these are used"
              (overlay-put ov 'display
                           (concat (mapconcat 'number-to-string lv ".") ". "))
              (overlay-put ov 'numbered-heading t)
-             (overlay-put ov 'face 'default))))
+             (overlay-put ov 'face 'org-outline-numbering-face))))
 
 ;;;###autoload
 (defun org-outline-numbering-clear-overlays ()
