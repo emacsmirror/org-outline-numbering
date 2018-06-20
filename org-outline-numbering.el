@@ -5,7 +5,7 @@
 ;; Author: Anders Johansson
 ;; Maintainer: Anders Johansson
 ;; Created: 2018-02-16
-;; Updated: 2018-02-16
+;; Modified: 2018-06-20
 ;; Keywords: wp, convenience
 
 ;; This program is free software; you can redistribute it and/or modify
