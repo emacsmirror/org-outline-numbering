@@ -55,15 +55,15 @@ When nil, parses the entire buffer for consistent numbering."
 
 ;;;###autoload
 (define-minor-mode org-outline-numbering-mode
-  "Minor mode to number org headings."
+  "Minor mode to number ‘org-mode’ headings."
   :init-value nil
   (if org-outline-numbering-mode
-      (org-outline-numbering-overlay)
-    (org-outline-numbering-clear-overlays)))
+      (org-outline-numbering-display)
+    (org-outline-numbering-clear)))
 
 ;;;###autoload
-(defun org-outline-numbering-overlay ()
-  "Put numbered overlays on the headings."
+(defun org-outline-numbering-display ()
+  "Put numbered overlays on ‘org-mode’ headings"
   (interactive)
   (save-restriction
     (unless org-outline-numbering-respect-narrowing (widen))
@@ -94,7 +94,7 @@ When nil, parses the entire buffer for consistent numbering."
                (overlay-put ov 'face 'org-outline-numbering-face)))))
 
 ;;;###autoload
-(defun org-outline-numbering-clear-overlays ()
+(defun org-outline-numbering-clear ()
   "Clear outline numbering overlays in widened buffer"
   (interactive)
   (save-restriction
