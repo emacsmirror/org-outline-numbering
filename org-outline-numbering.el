@@ -6,6 +6,9 @@
 ;; Maintainer: Anders Johansson
 ;; Created: 2018-02-16
 ;; Modified: 2018-06-20
+;; Version: 0.1
+;; URL: https://gitlab.com/andersjohansson/org-outline-numbering
+;; Package-Requires: ((emacs "24") (ov "1.0.6") (org "8.3"))
 ;; Keywords: wp, convenience
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -23,13 +26,27 @@
 
 ;;; Commentary:
 
-;; Defines a command and a mode for displaying the headline numbering
-;; in org mode buffers as overlays.
+;; This package defines a minor mode that displays an outline
+;; numbering as overlays on Org mode headlines. The numbering matches
+;; how it would appear when exporting the org file.
+
+;; Activating ‘org-outline-numbering-mode’ displays the numbers and
+;; deactivating it clears them. There is no facility for auto-updating
+;; but the numbering can be recalculated by calling
+;; ‘org-outline-numbering-display’ and cleared by calling
+;; ‘org-outline-numbering-clear’.
+
+;; By default trees that are commented, archived, tagged noexport or
+;; other similar things that would exclude them from org export don’t
+;; get a number to keep consistency with exports. If additional tags
+;; are to be excluded from numbering they can be added to
+;; ‘org-outline-numbering-ignored-tags’.
+
 ;;
 ;; Adapted from code posted by John Kitchin at:
 ;; https://emacs.stackexchange.com/a/32422
 
-;;; Code
+;;; Code:
 (require 'ox)
 (require 'cl-lib)
 (require 'ov)
@@ -46,7 +63,7 @@ settings which excludes these are used"
   :type '(repeat string))
 
 (defcustom org-outline-numbering-respect-narrowing nil
-  "When non-nil, numbering starts in narrowed buffer
+  "When non-nil, numbering starts in narrowed buffer.
 When nil, parses the entire buffer for consistent numbering."
   :type 'boolean)
 
@@ -63,7 +80,7 @@ When nil, parses the entire buffer for consistent numbering."
 
 ;;;###autoload
 (defun org-outline-numbering-display ()
-  "Put numbered overlays on ‘org-mode’ headings"
+  "Put numbered overlays on ‘org-mode’ headings."
   (interactive)
   (save-restriction
     (unless org-outline-numbering-respect-narrowing (widen))
@@ -95,7 +112,7 @@ When nil, parses the entire buffer for consistent numbering."
 
 ;;;###autoload
 (defun org-outline-numbering-clear ()
-  "Clear outline numbering overlays in widened buffer"
+  "Clear outline numbering overlays in widened buffer."
   (interactive)
   (save-restriction
     (widen)
