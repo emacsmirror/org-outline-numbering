@@ -6,3 +6,9 @@ Activating ~org-outline-numbering-mode~ displays the numbers and deactivating it
 By default trees that are commented, archived, tagged noexport or other similar things that would exclude them from org export don’t get a number to keep consistency with exports. If additional tags are to be excluded from numbering they can be added to ~org-outline-numbering-ignored-tags~.
 
 [[file:screenshot.png]]
+
+
+** A note about efficiency
+The outline numbers is determined by parsing the entire buffer (with ~org-element-parse-buffer~). This is obviously not very efficient and can be slow for large buffers, but is currently the simplest way to get a correctly numbered tree.
+
+
