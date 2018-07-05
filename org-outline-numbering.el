@@ -5,10 +5,10 @@
 ;; Author: Anders Johansson
 ;; Maintainer: Anders Johansson
 ;; Created: 2018-02-16
-;; Modified: 2018-06-20
+;; Modified: 2018-07-05
 ;; Version: 0.1
 ;; URL: https://gitlab.com/andersjohansson/org-outline-numbering
-;; Package-Requires: ((emacs "24") (ov "1.0.6") (org "8.3"))
+;; Package-Requires: ((emacs "24") (org "8.3") (cl-lib "0.6") (ov "1.0.6"))
 ;; Keywords: wp, convenience
 
 ;; This program is free software; you can redistribute it and/or modify
