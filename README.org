@@ -1,3 +1,5 @@
+*NOTE:* ~org-num~ is better! Org mode from version 9.3 includes the library ~org-num~ (see: https://code.orgmode.org/bzg/org-mode/src/master/lisp/org-num.el), which does all this in a better and more efficient way.
+
 * org-outline-numbering
 This package defines a minor mode that displays an outline numbering as overlays on Org mode headlines. The numbering matches how it would appear when exporting the org file.
 
